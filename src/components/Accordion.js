@@ -12,6 +12,7 @@ function Accordion(props) {
 
   const time = new Date(props.time_sent);
   const time_date = time.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
+  const time_shortdate = time.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' });
   const time_hour = time.toLocaleString('default', { hour12: true, hour: 'numeric', minute: 'numeric'});
 
   const toggleHandler = (e) => {
@@ -42,6 +43,7 @@ function Accordion(props) {
     config: { duration: "250" }
   });
 
+
   const arrowOpenAnimation = useSpring({
     to: { "transform": open ? "rotate(90deg)" : "rotate(0deg)"},
     config: { duration: "150" }
@@ -55,7 +57,7 @@ function Accordion(props) {
   
   
   return(
-    <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border-2 my-4 hover:drop-shadow cursor-default select-none"
+    <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border my-4 hover:drop-shadow cursor-default select-none"
       onClick={toggleHandler} >
       {/* Heading */}
       <div className="accordion__header h-max font-medium flex flex-auto flex-col md:flex-row gap-4 justify-start items-start md:items-center">
@@ -96,18 +98,18 @@ function Accordion(props) {
             <div>
               <h2 className="text-slate-900 text-lg line-clamp-1 transition-all ease-out delay-100">{props.email_subject}</h2>
             </div>
-            <div className={"flex flex-col md:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-slate-900" : "text-black")}>
+            <div className={"flex flex-col md:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-slate-900")}>
               <span>{props.first_name} {props.last_name} </span>
-              <span className="text-gray-500 w-full">{"<" + props.email + ">"}</span>
-              <span className="text-gray-500 invisible md:visible w-0 md:w-full h-0 md:h-full"> | </span>
-              <span className="text-gray-500 w-full">{time_date} at {time_hour}</span> 
+              <span className="text-gray-400 w-full">{"<" + props.email + ">"}</span>
+              <span className="text-gray-400 invisible md:visible w-0 md:w-full h-0 md:h-full"> | </span>
+              <span className="text-gray-400 w-full">{time_date} at {time_hour}</span> 
             </div>
           </div>
           
           {/* Right Div */}
           <div className="flex flex-initial items-center justify-self-end ml-auto">
             {/* Tag with Div */}
-            {open ? null : <Tag className="" props={props.tags} open={open} uniqueId={uniqueId}/>}
+            <Tag props={props.tags} open={open} location="header"/>
             {/* Arrow Div */}
             <animated.div style={arrowOpenAnimation}>
               <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
@@ -120,8 +122,22 @@ function Accordion(props) {
       {/* Content */}
       <div>
         <animated.div id="emailcontent" className="accordion__content overflow-hidden" style={openAnimation}>
-          <div className="mt-2 border-t-2 border-dashed">
-            <span >{props.email_body}</span>
+          <hr className="border-t border-dashed my-2 border-gray-300" />
+          <div className="mt-4">
+            {/* Content header */}
+            <div className="text-md flex flex-initial justify-between ">
+              <div>
+                <p className="font-medium">{props.first_name} {props.last_name}</p>
+                <p className="text-gray-400">{time_shortdate} {time_hour}</p>
+              </div>
+              <div>
+                <Tag props={props.tags} open={open} location="content" />
+              </div>
+            </div>
+            {/* Email Body */}
+            <div>
+              <span >{props.email_body}</span>
+            </div>
           </div>
         </animated.div>
       </div>
