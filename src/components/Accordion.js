@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsGrid3X2Gap, BsCircleFill } from 'react-icons/bs'
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useSpring, animated } from 'react-spring';
@@ -14,6 +14,8 @@ function Accordion(props) {
   const time_date = time.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
   const time_shortdate = time.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' });
   const time_hour = time.toLocaleString('default', { hour12: true, hour: 'numeric', minute: 'numeric'});
+
+
 
   const toggleHandler = (e) => {
     setOpen(!open);
@@ -39,8 +41,8 @@ function Accordion(props) {
   };
   
   const openAnimation = useSpring({
-    to: { "maxHeight": open ? "200" : "0px" },
-    config: { duration: "250" }
+    to: { "maxHeight": open ? "1000" : "0px" },
+    config: { duration: "200" }
   });
 
 
@@ -109,8 +111,10 @@ function Accordion(props) {
         {/* Right Div */}
         <div className="flex items-center justify-self-end ml-auto mt-4 md:mt-0 h-16">
           {/* Tag with Div */}
-          
-            <Tag props={props.tags} open={open} location="header"/>
+          <div>
+            <Tag className="justify-end" props={props.tags} open={open} location="header"/>
+          </div>
+            
           
             
             {/* Arrow Div */}
@@ -127,17 +131,19 @@ function Accordion(props) {
           <hr className="border-t border-dashed my-2 border-gray-300" />
           <div className="mt-4">
             {/* Content header */}
-            <div className="text-md flex flex-initial justify-between ">
+            <div className="text-md flex flex-col md:flex-row flex-initial justify-between">
               <div>
+                {/* Name */}
                 <p className="font-medium">{props.first_name} {props.last_name}</p>
+                {/* Date */}
                 <p className="text-gray-400">{time_shortdate} {time_hour}</p>
               </div>
-              <div className="max-w-4xl">
+              <div className="justify-start md:justify-end">
                 <Tag props={props.tags} open={open} location="content" />
               </div>
             </div>
             {/* Email Body */}
-            <div>
+            <div className="mt-4">
               <span >{props.email_body}</span>
             </div>
           </div>
