@@ -37,13 +37,13 @@ function Accordion(props) {
   };
   
   const openAnimation = useSpring({
-    to: { "maxHeight": open ? "100" : "0px" },
-    config: { duration: "300" }
+    to: { "maxHeight": open ? "200" : "0px" },
+    config: { duration: "250" }
   });
 
   const arrowOpenAnimation = useSpring({
     to: { "transform": open ? "rotate(90deg)" : "rotate(0deg)"},
-    config: { duration: "250" }
+    config: { duration: "150" }
   });
 
   const buttonHover = useSpring({
@@ -54,7 +54,7 @@ function Accordion(props) {
   
   
   return(
-    <div className="accordion__item box-content flex flex-col gap-2 bg-white rounded-lg p-4 border-solid border-2 my-4 hover:drop-shadow cursor-default"
+    <div className="accordion__item flex flex-col bg-white rounded-lg p-4 border-solid border-2 my-4 hover:drop-shadow cursor-default"
       onClick={toggleHandler} >
       {/* Heading */}
       <div className="accordion__header h-max font-medium flex flex-auto flex-col md:flex-row gap-4 justify-start items-start md:items-center">
@@ -89,13 +89,13 @@ function Accordion(props) {
         </div>
         
         {/* Center Div */}
-        <div className="flex flex-col md:flex-row box-content w-full gap-4 justify-start items-center">
+        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-center">
           {/* Subject Div */}
           <div>
             <div>
               <h2 className="text-lg line-clamp-1">{props.email_subject}</h2>
             </div>
-            <div className={"flex flex-col md:inline font-medium text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-black")}>
+            <div className={"flex flex-col md:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-black")}>
               <span>{props.first_name} {props.last_name} </span>
               <span className="text-gray-400 w-full">{"<" + props.email + ">"}</span>
               <span className="text-gray-400 invisible md:visible w-0 md:w-full h-0 md:h-full"> | </span>

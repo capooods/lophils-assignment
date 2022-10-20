@@ -11,7 +11,7 @@ function EmailAccordion() {
 
   return(
     <div>
-      <div className="emailBody box-border">
+      <div className="emailBody">
         {data.map((currElement, index) => (
           <Accordion {...currElement} />
         ))}
