@@ -57,7 +57,7 @@ function Accordion(props) {
   
   
   return(
-    <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border my-4 hover:drop-shadow cursor-default select-none"
+    <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border hover:drop-shadow cursor-default"
       onClick={toggleHandler} >
       {/* Heading */}
       <div className="accordion__header h-max font-medium flex flex-auto flex-col md:flex-row gap-4 justify-start items-start md:items-center">
@@ -92,7 +92,7 @@ function Accordion(props) {
         </div>
         
         {/* Center Div */}
-        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-center h-16">
+        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-center select-none">
           {/* Subject Div */}
           <div>
             <div>
@@ -105,22 +105,24 @@ function Accordion(props) {
               <span className="text-gray-400 w-full">{time_date} at {time_hour}</span> 
             </div>
           </div>
+        </div>
+        {/* Right Div */}
+        <div className="flex items-center justify-self-end ml-auto mt-4 md:mt-0 h-16">
+          {/* Tag with Div */}
           
-          {/* Right Div */}
-          <div className="flex flex-initial items-center justify-self-end ml-auto">
-            {/* Tag with Div */}
             <Tag props={props.tags} open={open} location="header"/>
+          
+            
             {/* Arrow Div */}
-            <animated.div style={arrowOpenAnimation}>
-              <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
-            </animated.div>
-          </div>
+          <animated.div style={arrowOpenAnimation}>
+            <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
+          </animated.div>
         </div>
       </div>
 
 
       {/* Content */}
-      <div>
+      <div className="">
         <animated.div id="emailcontent" className="accordion__content overflow-hidden" style={openAnimation}>
           <hr className="border-t border-dashed my-2 border-gray-300" />
           <div className="mt-4">
@@ -130,7 +132,7 @@ function Accordion(props) {
                 <p className="font-medium">{props.first_name} {props.last_name}</p>
                 <p className="text-gray-400">{time_shortdate} {time_hour}</p>
               </div>
-              <div>
+              <div className="max-w-4xl">
                 <Tag props={props.tags} open={open} location="content" />
               </div>
             </div>

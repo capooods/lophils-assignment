@@ -11,7 +11,7 @@ function EmailAccordion() {
 
   return(
     <div>
-      <div className="accordion__body">
+      <div className="accordion__body flex flex-col gap-4">
         {data.map((currElement, index) => (
           <Accordion {...currElement} key={currElement.id} />
         ))}
