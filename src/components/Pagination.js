@@ -2,7 +2,7 @@ import React from "react";
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 
-export default function Pagination({
+function Pagination({
   postsPerPage,
   totalPosts,
   paginateFront,
@@ -18,7 +18,7 @@ export default function Pagination({
   const pageUntil = displayedPosts;
 
   return (
-    <div className='flex flex-row justify-center items-center'>
+    <div className='flex flex-row justify-center items-center flex-none'>
       <div>
         <nav
           className='relative z-0 inline-flex'
@@ -62,3 +62,4 @@ export default function Pagination({
     
   );
 }
+export default Pagination;

@@ -94,7 +94,7 @@ function Accordion(props) {
         </div>
         
         {/* Center Div */}
-        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-center select-none">
+        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-start md:items-center select-none">
           {/* Subject Div */}
           <div>
             <div>
