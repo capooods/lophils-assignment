@@ -15,6 +15,17 @@ function Accordion(props) {
   const time_shortdate = time.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' });
   const time_hour = time.toLocaleString('default', { hour12: true, hour: 'numeric', minute: 'numeric'});
 
+  let timer;
+  const showTimer = (time) => {
+    console.log(time);
+    if (time < 60) {
+      if ((time === 1)) { return(time + " min.")}
+      return(time + " mins.") }
+    timer = Math.ceil(time / 60)
+    console.log(timer);
+    if ((time) >= 60 && (time) <= 120) { return(timer + " hr.") }
+    return(timer + " hrs.")
+  }
 
 
   const toggleHandler = (e) => {
@@ -62,7 +73,7 @@ function Accordion(props) {
     <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border hover:drop-shadow cursor-default"
       onClick={toggleHandler} >
       {/* Heading */}
-      <div className="accordion__header h-max font-medium flex flex-auto flex-col md:flex-row gap-4 justify-start items-start md:items-center">
+      <div className="accordion__header h-max font-medium flex flex-auto flex-col lg:flex-row gap-4 justify-start items-start lg:items-center">
         {/* Grid Order */}
         <div className="flex justify-start items-center gap-4 h-full">
           <div className="flex-none cursor-grab text-gray-400">
@@ -94,29 +105,37 @@ function Accordion(props) {
         </div>
         
         {/* Center Div */}
-        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-start md:items-center select-none">
+        <div className="flex flex-col lg:flex-row gap-4 justify-start items-start lg:items-center select-none">
           {/* Subject Div */}
           <div>
             <div>
               <h2 className="text-slate-900 text-lg line-clamp-1 transition-all ease-out delay-100">{props.email_subject}</h2>
             </div>
-            <div className={"flex flex-col md:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-slate-900")}>
+            <div className={"flex flex-col lg:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-slate-900")}>
               <span>{props.first_name} {props.last_name} </span>
               <span className="text-gray-400 w-full">{"<" + props.email + ">"}</span>
-              <span className="text-gray-400 invisible md:visible w-0 md:w-full h-0 md:h-full"> | </span>
+              <span className="text-gray-400 invisible lg:visible w-0 lg:w-full h-0 lg:h-full"> | </span>
               <span className="text-gray-400 w-full">{time_date} at {time_hour}</span> 
             </div>
           </div>
         </div>
         {/* Right Div */}
-        <div className="flex items-center justify-self-end ml-auto mt-4 md:mt-0 h-16">
+        <div className="flex items-center justify-self-end ml-auto mt-4 lg:mt-0 h-16 gap-4">
           {/* Tag with Div */}
-          <div>
-            <Tag className="justify-end" props={props.tags} open={open} location="header"/>
+          <div className="flex flex-row lg:flex-row items-center justify-end">
+            <div className="mr-4">
+              <Tag className="justify-end" props={props.tags} open={open} location="header"/>
+            </div>
+            
+            <div className="flex-none justify-end items-center">
+              <div className="bg-amber-100 text-xs text-amber-400 rounded p-1 pb-0">
+                {showTimer(props.time.toString())}
+              </div>
+            </div> 
           </div>
-            
+
+          {/* Timer with Div */}
           
-            
             {/* Arrow Div */}
           <animated.div style={arrowOpenAnimation}>
             <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
@@ -131,14 +150,14 @@ function Accordion(props) {
           <hr className="border-t border-dashed my-2 border-gray-300" />
           <div className="mt-4">
             {/* Content header */}
-            <div className="text-md flex flex-col md:flex-row flex-initial justify-between">
+            <div className="text-md flex flex-col lg:flex-row flex-initial justify-between">
               <div>
                 {/* Name */}
                 <p className="font-medium">{props.first_name} {props.last_name}</p>
                 {/* Date */}
                 <p className="text-gray-400">{time_shortdate} {time_hour}</p>
               </div>
-              <div className="justify-start md:justify-end">
+              <div className="justify-start lg:justify-end">
                 <Tag props={props.tags} open={open} location="content" />
               </div>
             </div>

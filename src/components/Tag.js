@@ -34,7 +34,7 @@ function Tag({props, open, location}) {
       if (width > 1024) { return renderFull() }
     }
     if ((width >= 768 && width <= 1024)) {
-      (tags[0].length > 15) ? wordLength = 0 : wordLength = 1;
+      ((tags[0].length > 15) || (tags[1].length > 15)) ? wordLength = 0 : wordLength = 1;
     } else { wordLength = 2}
 
     if (width < 768 ) {
@@ -43,6 +43,8 @@ function Tag({props, open, location}) {
     if (width < 640) {
       wordLength = 1;
     }
+    (tags[0].length < 15)  ? wordLength = 2 : wordLength = 0;
+    (tags[1].length < 10)  ? wordLength = 2 : wordLength = 1;
     tagHidden = tagNumber - wordLength;
     
     return (
