@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { BsGrid3X2Gap, BsCircleFill } from 'react-icons/bs'
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useSpring, animated } from 'react-spring';
+import Tag from './Tag';
 import _uniqueId from 'lodash/uniqueId';
 
 function Accordion(props) {
   const [open, setOpen] = useState(false);
   const [checkboxHover, setCheckboxHover] = useState(false);
-  const [uniqueId] = useState(_uniqueId('email-'))
+  const [uniqueId] = useState(_uniqueId('header-'))
 
   const time = new Date(props.time_sent);
   const time_date = time.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -54,13 +55,13 @@ function Accordion(props) {
   
   
   return(
-    <div className="accordion__item flex flex-col bg-white rounded-lg p-4 border-solid border-2 my-4 hover:drop-shadow cursor-default"
+    <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border-2 my-4 hover:drop-shadow cursor-default select-none"
       onClick={toggleHandler} >
       {/* Heading */}
       <div className="accordion__header h-max font-medium flex flex-auto flex-col md:flex-row gap-4 justify-start items-start md:items-center">
         {/* Grid Order */}
         <div className="flex justify-start items-center gap-4 h-full">
-          <div className="flex-none cursor-grab">
+          <div className="flex-none cursor-grab text-gray-400">
             <BsGrid3X2Gap className="-rotate-90" />
           </div>
           {/* Checkbox */}
@@ -77,7 +78,7 @@ function Accordion(props) {
             </div>
             
             {/* Date Div */}
-            <div className="flex flex-col flex-none justify-center text-center bg-gray-50 rounded-md border-2 border-gray-100 p-1 h-14 w-14">
+            <div className="text-slate-900 flex flex-col flex-none justify-center text-center bg-gray-50 rounded-lg border-2 border-gray-100 p-1 h-14 w-14">
               <div className="text-xl leading-none">{time.getDate()}</div>
               <div className="text-xs font-light leading-none">{monthConverter(time.getMonth())}</div>
             </div>
@@ -89,26 +90,32 @@ function Accordion(props) {
         </div>
         
         {/* Center Div */}
-        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-center">
+        <div className="flex flex-col md:flex-row w-full gap-4 justify-start items-center h-16">
           {/* Subject Div */}
           <div>
             <div>
-              <h2 className="text-lg line-clamp-1">{props.email_subject}</h2>
+              <h2 className="text-slate-900 text-lg line-clamp-1 transition-all ease-out delay-100">{props.email_subject}</h2>
             </div>
-            <div className={"flex flex-col md:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-black")}>
+            <div className={"flex flex-col md:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-slate-900" : "text-black")}>
               <span>{props.first_name} {props.last_name} </span>
-              <span className="text-gray-400 w-full">{"<" + props.email + ">"}</span>
-              <span className="text-gray-400 invisible md:visible w-0 md:w-full h-0 md:h-full"> | </span>
-              <span className="text-gray-400 w-full">{time_date} at {time_hour}</span> 
+              <span className="text-gray-500 w-full">{"<" + props.email + ">"}</span>
+              <span className="text-gray-500 invisible md:visible w-0 md:w-full h-0 md:h-full"> | </span>
+              <span className="text-gray-500 w-full">{time_date} at {time_hour}</span> 
             </div>
           </div>
           
-          {/* Arrow Icon */}
-          <animated.span className="justify-self-end ml-auto" style={arrowOpenAnimation}>
-            <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
-          </animated.span>
+          {/* Right Div */}
+          <div className="flex flex-initial items-center justify-self-end ml-auto">
+            {/* Tag with Div */}
+            {open ? null : <Tag className="" props={props.tags} open={open} uniqueId={uniqueId}/>}
+            {/* Arrow Div */}
+            <animated.div style={arrowOpenAnimation}>
+              <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
+            </animated.div>
+          </div>
         </div>
       </div>
+
 
       {/* Content */}
       <div>

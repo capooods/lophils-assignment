@@ -11,9 +11,9 @@ function EmailAccordion() {
 
   return(
     <div>
-      <div className="emailBody">
+      <div className="accordion__body">
         {data.map((currElement, index) => (
-          <Accordion {...currElement} />
+          <Accordion {...currElement} key={currElement.id} />
         ))}
         
       </div>
