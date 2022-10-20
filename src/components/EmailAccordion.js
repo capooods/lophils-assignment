@@ -4,16 +4,15 @@ import Data from "../Lophils.json";
 
 function EmailAccordion() {
   const [open, setOpen] = useState(false);
-  console.log(Data);
+  let data = Data.slice(0,10);
+  console.log(data);
   return(
     <div>
       <div className="emailBody box-border">
-        <Accordion
-          title="Item 1"
-          text="Test item" />
-        <Accordion
-          title="Item 2"
-          text="Test item 2" />
+        {data.map((currElement, index) => (
+          <Accordion {...currElement} />
+        ))}
+        
       </div>
     </div>
 )};
