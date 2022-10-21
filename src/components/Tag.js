@@ -50,7 +50,7 @@ function Tag({props, open, location}) {
     return (
       <>
         {tags.slice(0, wordLength).map((currElement, index) => (
-          <animated.div style={openAnimation} className="text-sm font-medium border rounded-lg p-2 pb-1 text-cyan-500 border-cyan-500 align-middle leading-none bg-sky-100" key={index}>
+          <animated.div style={openAnimation} className="text-sm font-medium border rounded-lg p-2 pb-1 text-cyan-500 border-cyan-500 align-middle leading-none bg-sky-100" key={"tag-"+index}>
             {currElement}
           </animated.div>
         ))}
@@ -66,7 +66,7 @@ function Tag({props, open, location}) {
     return (
       <>
         {tags.map((currElement, index) => (
-          <animated.div style={openAnimation} className="text-sm font-medium border rounded-lg p-2 pb-1 text-cyan-500 border-cyan-500 align-middle leading-none bg-sky-100" key={index}>
+          <animated.div style={openAnimation} className="text-sm font-medium border rounded-lg p-2 pb-1 text-cyan-500 border-cyan-500 align-middle leading-none bg-sky-100" key={"tag-"+index}>
             {currElement}
           </animated.div>
         ))}

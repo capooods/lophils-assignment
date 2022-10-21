@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { BsGrid3X2Gap, BsCircleFill } from 'react-icons/bs'
 import { MdKeyboardArrowRight } from 'react-icons/md';
+import { FiClock } from 'react-icons/fi'
 import { useSpring, animated } from 'react-spring';
 import Tag from './Tag';
 import _uniqueId from 'lodash/uniqueId';
+import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
-function Accordion(props) {
+function Accordion(props, { keyId, checkedState, handleCheckChange }) {
   const [open, setOpen] = useState(false);
   const [checkboxHover, setCheckboxHover] = useState(false);
-  const [uniqueId] = useState(_uniqueId('header-'))
 
   const time = new Date(props.time_sent);
   const time_date = time.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
   const time_shortdate = time.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' });
   const time_hour = time.toLocaleString('default', { hour12: true, hour: 'numeric', minute: 'numeric'});
 
+
+
   let timer;
   const showTimer = (time) => {
-    console.log(time);
     if (time < 60) {
-      if ((time === 1)) { return(time + " min.")}
-      return(time + " mins.") }
+      if ((time === 1)) { return(time + " min. ")}
+      return(time + " mins. ") }
     timer = Math.ceil(time / 60)
-    console.log(timer);
-    if ((time) >= 60 && (time) <= 120) { return(timer + " hr.") }
-    return(timer + " hrs.")
+    if ((time) >= 60 && (time) <= 120) { return(timer + " hr. ") }
+    return(timer + " hrs. ")
   }
 
 
@@ -81,9 +82,15 @@ function Accordion(props) {
           </div>
           {/* Checkbox */}
           <div className="flex justify-center items-center w-2" onClick={(e) => e.stopPropagation()}>
-            <animated.label for={uniqueId} style={buttonHover} className="absolute rounded-full w-25 h-25 bg-gray-200" 
+            <animated.label for={props.keyId} onClick={handleCheckChange} style={buttonHover} className="absolute rounded-full w-25 h-25 bg-gray-200" 
             onMouseLeave={() => setCheckboxHover(false)} />
-            <input className="absolute" type="checkbox" id={uniqueId} onMouseOver={() => setCheckboxHover(true)}  />
+            <input className="absolute" 
+              type="checkbox" 
+              id={props.keyId} 
+              key={props.keyId} 
+              checked={props.checkedState}
+              onChange={props.handleCheckChange} 
+              onMouseOver={() => setCheckboxHover(true)}  />
           </div>
           {/* Clickable */}
           <div className="flex justify-start items-center gap-4 my-auto">
@@ -105,41 +112,47 @@ function Accordion(props) {
         </div>
         
         {/* Center Div */}
-        <div className="flex flex-col lg:flex-row gap-4 justify-start items-start lg:items-center select-none">
-          {/* Subject Div */}
-          <div>
+        <div className="flex justify-between w-full flex-col lg:flex-row">
+          <div className="flex flex-col lg:flex-row gap-4 justify-start items-start lg:items-center select-none basis-1/2">
+            {/* Subject Div */}
             <div>
-              <h2 className="text-slate-900 text-lg line-clamp-1 transition-all ease-out delay-100">{props.email_subject}</h2>
-            </div>
-            <div className={"flex flex-col lg:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-slate-900")}>
-              <span>{props.first_name} {props.last_name} </span>
-              <span className="text-gray-400 w-full">{"<" + props.email + ">"}</span>
-              <span className="text-gray-400 invisible lg:visible w-0 lg:w-full h-0 lg:h-full"> | </span>
-              <span className="text-gray-400 w-full">{time_date} at {time_hour}</span> 
-            </div>
-          </div>
-        </div>
-        {/* Right Div */}
-        <div className="flex items-center justify-self-end ml-auto mt-4 lg:mt-0 h-16 gap-4">
-          {/* Tag with Div */}
-          <div className="flex flex-row lg:flex-row items-center justify-end">
-            <div className="mr-4">
-              <Tag className="justify-end" props={props.tags} open={open} location="header"/>
-            </div>
-            
-            <div className="flex-none justify-end items-center">
-              <div className="bg-amber-100 text-xs text-amber-400 rounded p-1 pb-0">
-                {showTimer(props.time.toString())}
+              <div>
+                <h2 className="text-slate-900 text-lg line-clamp-1 transition-all ease-out delay-100">{props.email_subject}</h2>
               </div>
-            </div> 
+              <div className={"flex flex-col lg:inline font-normal text-sm transition-colors ease-out delay-100 " + (open ? "text-gray-400" : "text-slate-900")}>
+                <span>{props.first_name} {props.last_name} </span>
+                <span className="text-gray-400 w-full">{"<" + props.email + ">"}</span>
+                <span className="text-gray-400 invisible lg:visible w-0 lg:w-full h-0 lg:h-full"> | </span>
+                <span className="text-gray-400 w-full">{time_date} at {time_hour}</span> 
+              </div>
+            </div>
           </div>
 
-          {/* Timer with Div */}
-          
-            {/* Arrow Div */}
-          <animated.div style={arrowOpenAnimation}>
-            <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
-          </animated.div>
+          {/* Right Div */}
+          <div className="flex items-center justify-end mt-4 lg:mt-0 h-16 gap-2 basis-1/2">
+            {/* Tag with Div */}
+            <div className="flex flex-row lg:flex-row items-center justify-end">
+              <div className="mr-2 w-2/3">
+                <Tag className="justify-end" props={props.tags} open={open} location="header"/>
+              </div>
+              {/* Timer with Div */}
+            </div>
+            <div className="flex">
+              
+            </div>
+            <div className="flex-none justify-end items-center bg-amber-100 text-xs text-amber-400 rounded p-1 pb-0">
+                <div className="flex flex-row">
+                  <div className="pt-[0.5px]"> 
+                    <FiClock />
+                  </div>
+                  <div className="flex-none font-light">{showTimer(props.time.toString())}</div>
+                </div>
+              </div> 
+              {/* Arrow Div */}
+            <animated.div style={arrowOpenAnimation}>
+              <MdKeyboardArrowRight className="text-3xl text-gray-400"/>
+            </animated.div>
+          </div>
         </div>
       </div>
 

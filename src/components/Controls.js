@@ -1,11 +1,11 @@
 import React from 'react';
 import { FaTrash } from 'react-icons/fa'
 
-function Controls() {
+function Controls({ handleCheckAll }) {
   return(
     <>
       <div className="flex flex-row items-center gap-4 flex-none">
-        <input type="checkbox" />
+        <input type="checkbox" onChange={handleCheckAll} />
         {/* Save Button */}
         <div className="">
           <a className="select-none inline-flex items-center rounded-md text-sm text-md text-gray-500 bg-emerald-100 border border-emerald-600 hover:drop-shadow"
