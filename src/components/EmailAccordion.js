@@ -11,6 +11,7 @@ function EmailAccordion() {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(49);
+  const [selectAll, setSelectAll] = useState(false);
   
   
 
@@ -33,9 +34,15 @@ function EmailAccordion() {
   }, []);
 
   const handleCheckAll = (e) => {
-    const updatedCheckedState = checkedState.map((item, index) =>
-      (index < checkedState.length) ? !item : item
-    )
+    setSelectAll(!selectAll);
+    let updatedCheckedState;
+    if (selectAll === true) {
+      updatedCheckedState = checkedState.map((item, index) =>
+      (index >= 0) ? false : item
+    )} else {
+      updatedCheckedState = checkedState.map((item, index) =>
+      (index >= 0) ? true : item )
+    }
     setCheckedState(updatedCheckedState)
   }
 
@@ -60,13 +67,14 @@ function EmailAccordion() {
       <Accordion {...currElement} 
         key={((currentPage-1) * postsPerPage) + index} 
         keyId={((currentPage-1) * postsPerPage) + index} 
-        checkedState={checkedState[((currentPage-1) * postsPerPage) + index]} 
+        checkedState={checkedState} 
         handleCheckChange={(e) => handleCheckChange(e, ((currentPage-1) * postsPerPage) + index)} />
     )));
   }
 
   // Multiple Selects
   const handleCheckChange = (e, position) => {
+    
     const updatedCheckedState = checkedState.map((item, index) =>
       index === position ? !item : item
     );
@@ -89,7 +97,7 @@ function EmailAccordion() {
   return(
     <div>
       <div className="flex flex-col md:flex-row justify-between mt-4">
-        <Controls handleCheckAll={(e) => handleCheckAll(e)} />
+        <Controls handleCheckAll={handleCheckAll} />
         <Pagination
           postsPerPage={postsPerPage}
           totalPosts={posts.length}

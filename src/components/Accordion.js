@@ -8,8 +8,10 @@ import _uniqueId from 'lodash/uniqueId';
 import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
 function Accordion(props, { keyId, checkedState, handleCheckChange }) {
+  console.log(props.keyId)
   const [open, setOpen] = useState(false);
   const [checkboxHover, setCheckboxHover] = useState(false);
+  const [checkbox, setCheckbox] = useState(false);
 
   const time = new Date(props.time_sent);
   const time_date = time.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -82,14 +84,14 @@ function Accordion(props, { keyId, checkedState, handleCheckChange }) {
           </div>
           {/* Checkbox */}
           <div className="flex justify-center items-center w-2" onClick={(e) => e.stopPropagation()}>
-            <animated.label for={props.keyId} onClick={handleCheckChange} style={buttonHover} className="absolute rounded-full w-25 h-25 bg-gray-200" 
+            <animated.label for={props.keyId} onClick={(e) => handleCheckChange(e)} style={buttonHover} className="absolute rounded-full w-25 h-25 bg-gray-200" 
             onMouseLeave={() => setCheckboxHover(false)} />
             <input className="absolute" 
               type="checkbox" 
               id={props.keyId} 
               key={props.keyId} 
-              checked={props.checkedState}
-              onChange={props.handleCheckChange} 
+              checked={checkedState}
+              onChange={(e) => props.handleCheckChange(e, props.keyId)} 
               onMouseOver={() => setCheckboxHover(true)}  />
           </div>
           {/* Clickable */}
