@@ -82,7 +82,7 @@ function Accordion(props, { keyId, checkedState, handleCheckChange }) {
           </div>
           {/* Checkbox */}
           <div className="flex justify-center items-center w-2" onClick={(e) => e.stopPropagation()}>
-            <animated.label for={props.keyId} onClick={(e) => handleCheckChange(e)} style={buttonHover} className="absolute rounded-full w-25 h-25 bg-gray-200" 
+            <animated.label htmlFor={props.keyId} onClick={(e) => props.handleCheckChange(e)} style={buttonHover} className="absolute rounded-full w-25 h-25 bg-gray-200" 
             onMouseLeave={() => setCheckboxHover(false)} />
             <input className="absolute" 
               type="checkbox" 

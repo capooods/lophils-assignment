@@ -8,6 +8,7 @@ import SelectAll from './SelectAll';
 
 function EmailAccordion() {
   const [data, setData] = useState([]);
+  const [saved, setSaved] = useState([]);
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +42,13 @@ function EmailAccordion() {
     })
     resetCheckedState();
   }, [data]);
+
+  useEffect(() => {
+    saved.sort((a, b) => {
+      return b.time_sent.localeCompare(a.time_sent);
+    })
+    console.log(saved);
+  }, [saved])
 
   
   const handleCheckAll = (e) => {
@@ -84,6 +92,18 @@ function EmailAccordion() {
     setData(result);
   }
 
+
+  const handleSave = () => {
+    let copyPosts = posts;
+    let copyTrueCheck = checkedState;
+    let copyFalseCheck = checkedState;
+    copyTrueCheck = copyTrueCheck.filter(copyTrueCheck => copyTrueCheck.checked === true)
+    copyFalseCheck = copyFalseCheck.filter(copyFalseCheck => copyFalseCheck.checked === false)
+    const saveData = copyPosts.filter(copyPosts => copyTrueCheck.some(copyTrueCheck => copyTrueCheck.index === copyPosts.index))
+    const deleteData = copyPosts.filter(copyPosts => copyFalseCheck.some(copyFalseCheck => copyFalseCheck.index === copyPosts.index))
+    setSaved(prev => [...saveData, ...prev])
+    setData(deleteData);
+  }
   // Pagination 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -115,7 +135,8 @@ function EmailAccordion() {
       <div className="flex flex-col md:flex-row justify-between mt-4">
         <Controls 
           handleCheckAll={handleCheckAll}
-          handleDelete={handleDelete} />
+          handleDelete={handleDelete}
+          handleSave={handleSave} />
         <Pagination
           postsPerPage={postsPerPage}
           totalPosts={posts.length}
