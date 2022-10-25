@@ -47,7 +47,6 @@ function EmailAccordion() {
     saved.sort((a, b) => {
       return b.time_sent.localeCompare(a.time_sent);
     })
-    console.log(saved);
   }, [saved])
 
   
@@ -91,7 +90,6 @@ function EmailAccordion() {
     setData(result);
   }
 
-
   const handleSave = () => {
     let copyPosts = posts;
     let copyTrueCheck = checkedState;
@@ -125,9 +123,6 @@ function EmailAccordion() {
       )));
   }
 
-  // Multiple Selects
-  
-
   return(
     <div>
       <div className="flex flex-col md:flex-row justify-between mt-4">
@@ -151,8 +146,8 @@ function EmailAccordion() {
           <span>Unread</span>
         </div>
         <div className="flex justify-center items-center">
-          <div className="text-white bg-gray-400 rounded-full h-9 w-9 flex justify-center items-center pl-1 pt-2 pb-1">
-            3
+          <div className="text-white bg-gray-400 rounded-full h-12 w-12 flex justify-center items-center pl-1 pt-2 pb-1">
+            {data.length}
             <MdKeyboardArrowDown className="text-sm" />
           </div>
         </div>

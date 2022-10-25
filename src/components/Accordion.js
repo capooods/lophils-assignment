@@ -66,7 +66,7 @@ function Accordion(props, { keyId, checkedState, handleCheckChange }) {
   const buttonHover = useSpring({
     to: { "height": checkboxHover ? "40px" : "0px",
           "width": checkboxHover ? "40px" : "0px" },
-    config: { duration: "100" }
+    config: { duration: "75" }
   });
   
   
