@@ -129,8 +129,6 @@ function EmailAccordion() {
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   const saveindexOfLastPost = (currentPage * postsPerPage) - unread.length;
   let saveindexOfFirstPost = saveindexOfLastPost - postsPerPage;
-  console.log("first: " + saveindexOfFirstPost);
-  console.log("last: " + saveindexOfLastPost);
   
   const currentSave = saveindex.slice(((saveindexOfFirstPost < 0) ? 0 : saveindexOfFirstPost), saveindexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
