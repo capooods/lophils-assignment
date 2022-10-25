@@ -15,12 +15,13 @@ function EmailAccordion() {
   const [selectAll, setSelectAll] = useState(false);
   const [checkedState, setCheckedState] = useState()
 
+  // on Mount
   useEffect(() => {
     setData(Data);
   }, []);
 
+  // on Data change
   useEffect(() => {
-    console.log("render");
     data.sort((a, b) => {
       return b.time_sent.localeCompare(a.time_sent);
     })
@@ -38,8 +39,6 @@ function EmailAccordion() {
     })
     resetCheckedState();
   }, [data]);
-  
-  console.log(checkedState);
   
   const handleCheckAll = (e) => {
     setSelectAll(!selectAll);
@@ -86,16 +85,17 @@ function EmailAccordion() {
   const paginateBack = () => setCurrentPage(currentPage - 1);
 
   
-
+  // currentData = currentPosts
   const renderBody = (currentData) => {
+    console.log(currentData.length)
     return(
-    currentData.map((currElement, index) => (
-      <Accordion {...currElement} 
-        key={((currentPage-1) * postsPerPage) + index} 
-        keyId={((currentPage-1) * postsPerPage) + index} 
-        checkedState={checkedState} 
-        handleCheckChange={(e) => handleCheckChange(e, ((currentPage-1) * postsPerPage) + index)} />
-    )));
+      currentData.map((currElement, index) => (
+        <Accordion {...currElement} 
+          key={((currentPage-1) * postsPerPage) + index} 
+          keyId={((currentPage-1) * postsPerPage) + index} 
+          checkedState={checkedState} 
+          handleCheckChange={(e) => handleCheckChange(e, ((currentPage-1) * postsPerPage) + index)} />
+      )));
   }
 
   // Multiple Selects
@@ -104,7 +104,8 @@ function EmailAccordion() {
   return(
     <div>
       <div className="flex flex-col md:flex-row justify-between mt-4">
-        <Controls handleCheckAll={handleCheckAll} />
+        <Controls 
+          handleCheckAll={handleCheckAll} />
         <Pagination
           postsPerPage={postsPerPage}
           totalPosts={posts.length}
