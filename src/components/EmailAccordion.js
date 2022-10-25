@@ -7,8 +7,10 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import SelectAll from './SelectAll';
 
 function EmailAccordion() {
+  const [alldata, setAlldata] = useState([]);
   const [unread, setUnread] = useState([]);
   const [saved, setSaved] = useState([]);
+  const [saveindex, setSaveindex] = useState([]);
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,7 +21,19 @@ function EmailAccordion() {
   // on Mount
   useEffect(() => {
     setUnread(Data);
+    // setAlldata(Data);
   }, []);
+
+  // useEffect(() => {
+  //   setAlldata(() => [...unread, ...saved])
+  //   const indexAll = async (data) => {
+  //     const indexFunction = data.map((current, index) => ({...current, "index": index}))
+  //     setAlldata(indexFunction)
+  //   };
+  //   indexAll(alldata)
+  //   console.log(alldata)
+  // }, [unread, saved])
+
 
   // on Data change
   useEffect(() => {
@@ -33,7 +47,6 @@ function EmailAccordion() {
     };
     fetchPosts(unread);
 
-
     const resetCheckedState = (() => {
       setCheckedState([]);
       for (let i = 0; i < (unread.length + saved.length); i++) {
@@ -41,12 +54,34 @@ function EmailAccordion() {
       }
     })
     resetCheckedState();
+    setSelectAll(false)
+
   }, [unread]);
+
+  useEffect(() => {
+    setAlldata(() => [...posts, ...saved])
+  }, [posts]);
+
 
   useEffect(() => {
     saved.sort((a, b) => {
       return b.time_sent.localeCompare(a.time_sent);
     })
+
+    const indexSave = async (data) => {
+      const indexFunction = data.map((current, index) => ({...current, "index": (unread.length + index)}))
+      setSaveindex(indexFunction)
+    };
+    indexSave(saved);
+
+    const resetCheckedState = (() => {
+      setCheckedState([]);
+      for (let i = 0; i < (unread.length + saved.length); i++) {
+        setCheckedState((prev) => [...prev, {"index": i, "checked": false}])
+      }
+    })
+    setSelectAll(false)
+    resetCheckedState();
   }, [saved])
 
   
@@ -85,9 +120,13 @@ function EmailAccordion() {
   const handleDelete = () => {
     let copyPosts = posts;
     let copyCheck = checkedState;
+    let copySave = saveindex;
+    
     copyCheck = copyCheck.filter(copyCheck => copyCheck.checked === false)
     const result = copyPosts.filter(copyPosts => copyCheck.some(copyCheck => copyCheck.index === copyPosts.index))
     setUnread(result);
+    const saveresult = copySave.filter(copySave => copyCheck.some(copyCheck => copyCheck.index === copySave.index))
+    setSaved(saveresult);
   }
 
   const handleSave = () => {
@@ -128,10 +167,10 @@ function EmailAccordion() {
     return(
       savedData.map((currElement, index) => (
         <Accordion {...currElement} 
-          key={(currentPosts.length + index)} 
-          keyId={(currentPosts.length + index)} 
+          key={(currElement.index)} 
+          keyId={(currElement.index)} 
           checkedState={checkedState} 
-          handleCheckChange={(e) => handleCheckChange(e, (currentPosts.length + index))} 
+          handleCheckChange={(e) => handleCheckChange(e, (currElement.index))} 
           />
       )));
   }
@@ -145,7 +184,7 @@ function EmailAccordion() {
           handleSave={handleSave} />
         <Pagination
           postsPerPage={postsPerPage}
-          totalPosts={posts.length}
+          totalPosts={alldata.length}
           paginateBack={paginateBack}
           paginateFront={paginateFront}
           currentPage={currentPage}
@@ -183,7 +222,7 @@ function EmailAccordion() {
       </div>
 
       <div className="accordion__body flex flex-col gap-4 my-4">
-        {(currentPosts.length < 50) ? renderSaved(saved) : null}
+        {(currentPosts.length < 50) ? renderSaved(saveindex) : null}
       </div>
     </div>
 )};

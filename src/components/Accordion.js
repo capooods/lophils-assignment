@@ -8,6 +8,7 @@ import _uniqueId from 'lodash/uniqueId';
 
 function Accordion(props, { keyId, checkedState, handleCheckChange }) {
   const element_key = parseInt(props.keyId);
+  console.log(element_key)
   const [open, setOpen] = useState(false);
   const [checkboxHover, setCheckboxHover] = useState(false);
 
