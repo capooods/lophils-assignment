@@ -5,13 +5,11 @@ import { FiClock } from 'react-icons/fi'
 import { useSpring, animated } from 'react-spring';
 import Tag from './Tag';
 import _uniqueId from 'lodash/uniqueId';
-import { keyboard } from '@testing-library/user-event/dist/keyboard';
 
 function Accordion(props, { keyId, checkedState, handleCheckChange }) {
-  console.log(props.keyId)
+  const element_key = parseInt(props.keyId);
   const [open, setOpen] = useState(false);
   const [checkboxHover, setCheckboxHover] = useState(false);
-  const [checkbox, setCheckbox] = useState(false);
 
   const time = new Date(props.time_sent);
   const time_date = time.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -90,7 +88,7 @@ function Accordion(props, { keyId, checkedState, handleCheckChange }) {
               type="checkbox" 
               id={props.keyId} 
               key={props.keyId} 
-              checked={checkedState}
+              checked={props.checkedState[element_key].checked}
               onChange={(e) => props.handleCheckChange(e, props.keyId)} 
               onMouseOver={() => setCheckboxHover(true)}  />
           </div>

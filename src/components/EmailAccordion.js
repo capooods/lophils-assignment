@@ -7,49 +7,75 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import SelectAll from './SelectAll';
 
 function EmailAccordion() {
+  const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(49);
   const [selectAll, setSelectAll] = useState(false);
-  
-  
+  const [checkedState, setCheckedState] = useState()
 
-  let data = Data;
-  data.sort((a, b) => {
-    return b.time_sent.localeCompare(a.time_sent);
-  })
-
-  const [checkedState, setCheckedState] = useState(
-    new Array(data.length).fill(false)
-  );
-  console.log(checkedState);
-  
   useEffect(() => {
+    setData(Data);
+  }, []);
+
+  useEffect(() => {
+    console.log("render");
+    data.sort((a, b) => {
+      return b.time_sent.localeCompare(a.time_sent);
+    })
+
     const fetchPosts = async (data) => {
       setPosts(data)
     };
-
     fetchPosts(data);
-  }, []);
 
+    const resetCheckedState = (() => {
+      setCheckedState([]);
+      for (let i = 0; i < data.length; i++) {
+        setCheckedState((prev) => [...prev, {"index": i, "checked": false}])
+      }
+    })
+    resetCheckedState();
+  }, [data]);
+  
+  console.log(checkedState);
+  
   const handleCheckAll = (e) => {
     setSelectAll(!selectAll);
     let updatedCheckedState;
     if (selectAll === true) {
       updatedCheckedState = checkedState.map((item, index) =>
-      (index >= 0) ? false : item
+      (index >= 0) ? {"index": index, "checked": false} : item
     )} else {
       updatedCheckedState = checkedState.map((item, index) =>
-      (index >= 0) ? true : item )
+      (index >= 0) ? {"index": index, "checked": true} : item )
     }
     setCheckedState(updatedCheckedState)
   }
 
+  const handleCheckChange = (e, position) => {
+    
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? {"index": index, "checked": !item.checked} : item
+    );
+
+    setCheckedState(updatedCheckedState);
+
+    // const totalPrice = updatedCheckedState.reduce(
+    //   (sum, currentState, index) => {
+    //     if (currentState === true) {
+    //       return sum + data[index].price;
+    //     }
+    //     return sum;
+    //   },
+    //   0
+    // );
+  };
+  
   const handleDelete = (e) => {
     
   }
-  
   // Pagination 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -73,26 +99,7 @@ function EmailAccordion() {
   }
 
   // Multiple Selects
-  const handleCheckChange = (e, position) => {
-    
-    const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? !item : item
-    );
-
-    setCheckedState(updatedCheckedState);
-
-    const totalPrice = updatedCheckedState.reduce(
-      (sum, currentState, index) => {
-        if (currentState === true) {
-          return sum + data[index].price;
-        }
-        return sum;
-      },
-      0
-    );
-
-    
-  };
+  
 
   return(
     <div>
