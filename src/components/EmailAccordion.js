@@ -88,7 +88,6 @@ function EmailAccordion() {
     let copyCheck = checkedState;
     copyCheck = copyCheck.filter(copyCheck => copyCheck.checked === false)
     const result = copyPosts.filter(copyPosts => copyCheck.some(copyCheck => copyCheck.index === copyPosts.index))
-    console.log(result);
     setData(result);
   }
 
@@ -116,7 +115,6 @@ function EmailAccordion() {
   
   // currentData = currentPosts
   const renderBody = (currentData) => {
-    console.log(currentData.length)
     return(
       currentData.map((currElement, index) => (
         <Accordion {...currElement} 
