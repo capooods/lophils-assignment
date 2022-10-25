@@ -27,9 +27,11 @@ function EmailAccordion() {
     })
 
     const fetchPosts = async (data) => {
-      setPosts(data)
+      const indexFunction = data.map((current, index) => ({...current, "index": index}))
+      setPosts(indexFunction)
     };
     fetchPosts(data);
+
 
     const resetCheckedState = (() => {
       setCheckedState([]);
@@ -39,6 +41,7 @@ function EmailAccordion() {
     })
     resetCheckedState();
   }, [data]);
+
   
   const handleCheckAll = (e) => {
     setSelectAll(!selectAll);
@@ -72,9 +75,15 @@ function EmailAccordion() {
     // );
   };
   
-  const handleDelete = (e) => {
-    
+  const handleDelete = () => {
+    let copyPosts = posts;
+    let copyCheck = checkedState;
+    copyCheck = copyCheck.filter(copyCheck => copyCheck.checked === false)
+    const result = copyPosts.filter(copyPosts => copyCheck.some(copyCheck => copyCheck.index === copyPosts.index))
+    console.log(result);
+    setData(result);
   }
+
   // Pagination 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -105,7 +114,8 @@ function EmailAccordion() {
     <div>
       <div className="flex flex-col md:flex-row justify-between mt-4">
         <Controls 
-          handleCheckAll={handleCheckAll} />
+          handleCheckAll={handleCheckAll}
+          handleDelete={handleDelete} />
         <Pagination
           postsPerPage={postsPerPage}
           totalPosts={posts.length}

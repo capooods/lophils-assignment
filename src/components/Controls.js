@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaTrash } from 'react-icons/fa'
 
-function Controls({ handleCheckAll }) {
+function Controls({ handleCheckAll, handleDelete }) {
   return(
     <>
       <div className="flex flex-row items-center gap-4 flex-none">
@@ -41,7 +41,7 @@ function Controls({ handleCheckAll }) {
         {/* Delete Button */}
         <div className="">
           <a className="select-none inline-flex items-center rounded-md text-sm text-md text-gray-500 bg-red-100 border border-red-500 hover:drop-shadow"
-            // onClick={}
+            onClick={handleDelete}
             href='#'
           >
             <div className="flex flex-row justify-center items-center p-1 text-red-500 ">
