@@ -7,7 +7,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import SelectAll from './SelectAll';
 
 function EmailAccordion() {
-  const [data, setData] = useState([]);
+  const [unread, setUnread] = useState([]);
   const [saved, setSaved] = useState([]);
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -18,12 +18,12 @@ function EmailAccordion() {
 
   // on Mount
   useEffect(() => {
-    setData(Data);
+    setUnread(Data);
   }, []);
 
   // on Data change
   useEffect(() => {
-    data.sort((a, b) => {
+    unread.sort((a, b) => {
       return b.time_sent.localeCompare(a.time_sent);
     })
 
@@ -31,17 +31,17 @@ function EmailAccordion() {
       const indexFunction = data.map((current, index) => ({...current, "index": index}))
       setPosts(indexFunction)
     };
-    fetchPosts(data);
+    fetchPosts(unread);
 
 
     const resetCheckedState = (() => {
       setCheckedState([]);
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < (unread.length + saved.length); i++) {
         setCheckedState((prev) => [...prev, {"index": i, "checked": false}])
       }
     })
     resetCheckedState();
-  }, [data]);
+  }, [unread]);
 
   useEffect(() => {
     saved.sort((a, b) => {
@@ -87,7 +87,7 @@ function EmailAccordion() {
     let copyCheck = checkedState;
     copyCheck = copyCheck.filter(copyCheck => copyCheck.checked === false)
     const result = copyPosts.filter(copyPosts => copyCheck.some(copyCheck => copyCheck.index === copyPosts.index))
-    setData(result);
+    setUnread(result);
   }
 
   const handleSave = () => {
@@ -99,7 +99,7 @@ function EmailAccordion() {
     const saveData = copyPosts.filter(copyPosts => copyTrueCheck.some(copyTrueCheck => copyTrueCheck.index === copyPosts.index))
     const deleteData = copyPosts.filter(copyPosts => copyFalseCheck.some(copyFalseCheck => copyFalseCheck.index === copyPosts.index))
     setSaved(prev => [...saveData, ...prev])
-    setData(deleteData);
+    setUnread(deleteData);
   }
   // Pagination 
   const indexOfLastPost = currentPage * postsPerPage;
@@ -120,6 +120,19 @@ function EmailAccordion() {
           keyId={((currentPage-1) * postsPerPage) + index} 
           checkedState={checkedState} 
           handleCheckChange={(e) => handleCheckChange(e, ((currentPage-1) * postsPerPage) + index)} />
+      )));
+  }
+
+  const renderSaved = (savedData) => {
+    console.log(saved)
+    return(
+      savedData.map((currElement, index) => (
+        <Accordion {...currElement} 
+          key={(currentPosts.length + index)} 
+          keyId={(currentPosts.length + index)} 
+          checkedState={checkedState} 
+          handleCheckChange={(e) => handleCheckChange(e, (currentPosts.length + index))} 
+          />
       )));
   }
 
@@ -147,13 +160,30 @@ function EmailAccordion() {
         </div>
         <div className="flex justify-center items-center">
           <div className="text-white bg-gray-400 rounded-full h-12 w-12 flex justify-center items-center pl-1 pt-2 pb-1">
-            {data.length}
+            {unread.length}
             <MdKeyboardArrowDown className="text-sm" />
           </div>
         </div>
       </div>
       <div className="accordion__body flex flex-col gap-4 my-4">
         {renderBody(currentPosts)}
+      </div>
+
+      {/* Label */}
+      <div className="flex flex-row justify-between items-center my-4">
+        <div className="text-gray-400 font-medium ">
+          <span>Recently Saved</span>
+        </div>
+        <div className="flex justify-center items-center">
+          <div className="text-white bg-gray-400 rounded-full h-12 w-12 flex justify-center items-center pl-1 pt-2 pb-1">
+            {saved.length}
+            <MdKeyboardArrowDown className="text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <div className="accordion__body flex flex-col gap-4 my-4">
+        {(currentPosts.length < 50) ? renderSaved(saved) : null}
       </div>
     </div>
 )};
