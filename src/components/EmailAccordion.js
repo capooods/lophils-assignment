@@ -14,7 +14,7 @@ function EmailAccordion() {
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(49);
+  const [postsPerPage] = useState(50);
   const [selectAll, setSelectAll] = useState(false);
   const [checkedState, setCheckedState] = useState()
 
@@ -144,6 +144,11 @@ function EmailAccordion() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const saveindexOfLastPost = (currentPage * postsPerPage) - unread.length;
+  const saveindexOfFirstPost = saveindexOfLastPost - postsPerPage;
+  
+
+  const currentSave = saveindex.slice(saveindexOfFirstPost, saveindexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const paginateFront = () => setCurrentPage(currentPage + 1);
@@ -155,14 +160,15 @@ function EmailAccordion() {
     return(
       currentData.map((currElement, index) => (
         <Accordion {...currElement} 
-          key={((currentPage-1) * postsPerPage) + index} 
-          keyId={((currentPage-1) * postsPerPage) + index} 
+          key={currElement.index} 
+          keyId={currElement.index} 
           checkedState={checkedState} 
-          handleCheckChange={(e) => handleCheckChange(e, ((currentPage-1) * postsPerPage) + index)} />
+          handleCheckChange={(e) => handleCheckChange(e, (currElement.index))} />
       )));
   }
 
   const renderSaved = (savedData) => {
+    
     console.log(saved)
     return(
       savedData.map((currElement, index) => (
@@ -222,7 +228,7 @@ function EmailAccordion() {
       </div>
 
       <div className="accordion__body flex flex-col gap-4 my-4">
-        {(currentPosts.length < 50) ? renderSaved(saveindex) : null}
+        {(currentPosts.length < postsPerPage) ? renderSaved(currentSave) : null}
       </div>
     </div>
 )};
