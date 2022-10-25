@@ -21,18 +21,9 @@ function EmailAccordion() {
   // on Mount
   useEffect(() => {
     setUnread(Data);
-    // setAlldata(Data);
   }, []);
 
-  // useEffect(() => {
-  //   setAlldata(() => [...unread, ...saved])
-  //   const indexAll = async (data) => {
-  //     const indexFunction = data.map((current, index) => ({...current, "index": index}))
-  //     setAlldata(indexFunction)
-  //   };
-  //   indexAll(alldata)
-  //   console.log(alldata)
-  // }, [unread, saved])
+
 
 
   // on Data change
@@ -105,19 +96,10 @@ function EmailAccordion() {
     );
 
     setCheckedState(updatedCheckedState);
-
-    // const totalPrice = updatedCheckedState.reduce(
-    //   (sum, currentState, index) => {
-    //     if (currentState === true) {
-    //       return sum + data[index].price;
-    //     }
-    //     return sum;
-    //   },
-    //   0
-    // );
   };
   
   const handleDelete = () => {
+    setSelectAll(false);
     let copyPosts = posts;
     let copyCheck = checkedState;
     let copySave = saveindex;
@@ -130,6 +112,7 @@ function EmailAccordion() {
   }
 
   const handleSave = () => {
+    setSelectAll(false);
     let copyPosts = posts;
     let copyTrueCheck = checkedState;
     let copyFalseCheck = checkedState;
@@ -145,10 +128,11 @@ function EmailAccordion() {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   const saveindexOfLastPost = (currentPage * postsPerPage) - unread.length;
-  const saveindexOfFirstPost = saveindexOfLastPost - postsPerPage;
+  let saveindexOfFirstPost = saveindexOfLastPost - postsPerPage;
+  console.log("first: " + saveindexOfFirstPost);
+  console.log("last: " + saveindexOfLastPost);
   
-
-  const currentSave = saveindex.slice(saveindexOfFirstPost, saveindexOfLastPost);
+  const currentSave = saveindex.slice(((saveindexOfFirstPost < 0) ? 0 : saveindexOfFirstPost), saveindexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const paginateFront = () => setCurrentPage(currentPage + 1);
@@ -156,35 +140,42 @@ function EmailAccordion() {
 
   
   // currentData = currentPosts
-  const renderBody = (currentData) => {
-    return(
-      currentData.map((currElement, index) => (
-        <Accordion {...currElement} 
-          key={currElement.index} 
-          keyId={currElement.index} 
-          checkedState={checkedState} 
-          handleCheckChange={(e) => handleCheckChange(e, (currElement.index))} />
-      )));
-  }
+  const renderBody = (currentData, type) => {
+    return (
+    <>
+      <div className="flex flex-row justify-between items-center my-4">
+          <div className="text-gray-400 font-medium ">
+            <span>{type}</span>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="text-white bg-gray-400 rounded-full h-12 w-12 flex justify-center items-center pl-1 pt-2 pb-1">
+              {type === "Unread" ? unread.length : saved.length}
+              <MdKeyboardArrowDown className="text-sm" />
+            </div>
+          </div>
+      </div>
 
-  const renderSaved = (savedData) => {
-    
-    console.log(saved)
-    return(
-      savedData.map((currElement, index) => (
-        <Accordion {...currElement} 
-          key={(currElement.index)} 
-          keyId={(currElement.index)} 
-          checkedState={checkedState} 
-          handleCheckChange={(e) => handleCheckChange(e, (currElement.index))} 
-          />
-      )));
+      <div className="accordion__body flex flex-col gap-4 my-4">
+        {currentData.map((currElement, index) => (
+          <Accordion {...currElement} 
+            key={currElement.index} 
+            keyId={currElement.index} 
+            checkedState={checkedState} 
+            handleCheckChange={(e) => handleCheckChange(e, (currElement.index))}
+            type={type} />
+        ))}
+        
+      </div>
+      
+    </>
+    )
   }
 
   return(
     <div>
       <div className="flex flex-col md:flex-row justify-between mt-4">
         <Controls 
+          selectAll={selectAll}
           handleCheckAll={handleCheckAll}
           handleDelete={handleDelete}
           handleSave={handleSave} />
@@ -199,37 +190,13 @@ function EmailAccordion() {
       <div className="my-4">
         <hr />
       </div>
-      <div className="flex flex-row justify-between items-center my-4">
-        <div className="text-gray-400 font-medium ">
-          <span>Unread</span>
-        </div>
-        <div className="flex justify-center items-center">
-          <div className="text-white bg-gray-400 rounded-full h-12 w-12 flex justify-center items-center pl-1 pt-2 pb-1">
-            {unread.length}
-            <MdKeyboardArrowDown className="text-sm" />
-          </div>
-        </div>
-      </div>
-      <div className="accordion__body flex flex-col gap-4 my-4">
-        {renderBody(currentPosts)}
-      </div>
+      {/* Unread */}
+      {(currentPosts.length !== 0) ? renderBody(currentPosts, "Unread") : null}
 
-      {/* Label */}
-      <div className="flex flex-row justify-between items-center my-4">
-        <div className="text-gray-400 font-medium ">
-          <span>Recently Saved</span>
-        </div>
-        <div className="flex justify-center items-center">
-          <div className="text-white bg-gray-400 rounded-full h-12 w-12 flex justify-center items-center pl-1 pt-2 pb-1">
-            {saved.length}
-            <MdKeyboardArrowDown className="text-sm" />
-          </div>
-        </div>
-      </div>
+      {/* Recently Saved */}
 
-      <div className="accordion__body flex flex-col gap-4 my-4">
-        {(currentPosts.length < postsPerPage) ? renderSaved(currentSave) : null}
-      </div>
+      {(currentPosts.length < postsPerPage) ? renderBody(currentSave, "Recently Saved") : null}
+
     </div>
 )};
 

@@ -6,7 +6,7 @@ import { useSpring, animated } from 'react-spring';
 import Tag from './Tag';
 import _uniqueId from 'lodash/uniqueId';
 
-function Accordion(props, { keyId, checkedState, handleCheckChange }) {
+function Accordion(props, { keyId, checkedState, handleCheckChange, type }) {
   const element_key = parseInt(props.keyId);
   const [open, setOpen] = useState(false);
   const [checkboxHover, setCheckboxHover] = useState(false);
@@ -71,7 +71,7 @@ function Accordion(props, { keyId, checkedState, handleCheckChange }) {
   
   
   return(
-    <div className="accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border hover:drop-shadow cursor-default"
+    <div className={"accordion__item flex flex-col bg-white rounded-lg p-5 border-solid border hover:drop-shadow cursor-default " + (props.type === "Recently Saved" ? "opacity-60": null)}
       onClick={toggleHandler} >
       {/* Heading */}
       <div className="accordion__header h-max font-medium flex flex-auto flex-col lg:flex-row gap-4 justify-start items-start lg:items-center">
@@ -96,7 +96,7 @@ function Accordion(props, { keyId, checkedState, handleCheckChange }) {
           <div className="flex justify-start items-center gap-4 my-auto">
             {/* Green Circle */}
             <div>
-              <BsCircleFill className="text-green-600 text-md" />
+              <BsCircleFill className={"text-green-600 text-md " + (props.type === "Recently Saved" ? "text-red-600" : "text-green-600")} />
             </div>
             
             {/* Date Div */}
