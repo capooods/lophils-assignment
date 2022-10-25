@@ -4,7 +4,6 @@ import Data from '../Lophils.json';
 import Pagination from './Pagination';
 import Controls from './Controls';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-import SelectAll from './SelectAll';
 
 function EmailAccordion() {
   const [alldata, setAlldata] = useState([]);
@@ -22,9 +21,6 @@ function EmailAccordion() {
   useEffect(() => {
     setUnread(Data);
   }, []);
-
-
-
 
   // on Data change
   useEffect(() => {
@@ -90,11 +86,9 @@ function EmailAccordion() {
   }
 
   const handleCheckChange = (e, position) => {
-    
     const updatedCheckedState = checkedState.map((item, index) =>
       index === position ? {"index": index, "checked": !item.checked} : item
     );
-
     setCheckedState(updatedCheckedState);
   };
   
@@ -141,6 +135,7 @@ function EmailAccordion() {
   const renderBody = (currentData, type) => {
     return (
     <>
+      {/* Label */}
       <div className="flex flex-row justify-between items-center my-4">
           <div className="text-gray-400 font-medium ">
             <span>{type}</span>
@@ -152,7 +147,7 @@ function EmailAccordion() {
             </div>
           </div>
       </div>
-
+      {/* Accordion generator */}
       <div className="accordion__body flex flex-col gap-4 my-4">
         {currentData.map((currElement, index) => (
           <Accordion {...currElement} 
